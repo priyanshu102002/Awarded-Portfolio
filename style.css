@@ -28,7 +28,7 @@ body {
 }
 
 .pointer{
-    transition: cubic-bezier(0.165, 0.84, 0.44, 1) all 1s;
+    transition: cubic-bezier(0.19, 1, 0.22, 1) all 1s;
     position: absolute;
     z-index: 999;
     width: 15px;
@@ -76,15 +76,27 @@ nav a {
     margin-left: 60px;
 }
 
+.bounding {
+    width: fit-content;
+    overflow: hidden;
+}
+
+.bounding .boundingelem{
+    transform: translateY(100%);
+}
+
 .heading .heading-two {
     margin-left: 230px;
 }
 
 .block-text {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
     width: fit-content;
 }
 
-.block-text h5 {
+.block-text  h5 {
     text-align: right;
     font-size: 1.1vw;
     text-transform: uppercase;
@@ -92,6 +104,9 @@ nav a {
 }
 
 .sub-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     margin-top: 100px;
     padding-right: 60px;
 }

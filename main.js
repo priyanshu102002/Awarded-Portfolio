@@ -1,3 +1,7 @@
+const main = document.querySelector("#main");
+const pointer = document.querySelector(".pointer");
+
+// for scroll trigger and locomotive js work together
 function scrolltriggerandgsap() {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -35,12 +39,75 @@ function scrolltriggerandgsap() {
 
 scrolltriggerandgsap();
 
-const pointer = document.querySelector(".pointer");
-const main = document.querySelector("#main");
-function circleMouseFollower() {
+
+let timeout = 0;
+
+// for circle mouse follower
+function circleMouseFollower(xScale, yScale) {
     main.addEventListener("mousemove", (e) => {
-        pointer.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+        pointer.style.transform = `translate(${e.clientX}px,${e.clientY}px) scale(${xScale},${yScale})`;
     });
 }
 
 circleMouseFollower();
+
+// for oval mouse follower
+
+function ovalCircleMouseFollower() {
+    let xScale = 1;
+    let yScale = 1;
+
+    let xPrev = 0;
+    let yPrev = 0;
+
+    main.addEventListener("mousemove",(e) => {
+        clearTimeout(timeout);
+        let xDiff = e.clientX - xPrev;
+        let yDiff = e.clientY - yPrev;
+
+        xPrev = e.clientX;
+        yPrev = e.clientY;
+
+        // mapping
+        xScale = gsap.utils.clamp(.8,1.2,xDiff)
+        yScale = gsap.utils.clamp(.8,1.2,yDiff)
+        
+        circleMouseFollower(xScale,yScale);
+
+        timeout = setTimeout(function(){
+            pointer.style.transform = `translate(${e.clientX}px,${e.clientY}px) scale(1,1)`;
+        },100)
+    })
+}
+
+ovalCircleMouseFollower();
+
+//  for first page animation
+function firstPageAnim(){
+    const tl = gsap.timeline();
+
+    tl.from("nav",{
+        y: -10,
+        opacity: 0,
+        duration: 2,
+        ease: Expo.easeInOut
+    })
+
+    tl.to(".boundingelem",{
+        y: 0,
+        duration: 2,
+        ease: Expo.easeInOut,
+        stagger: 0.2,
+        delay: -1
+    })
+
+    tl.from(".hero-footer",{
+        y: -20,
+        opacity: 0,
+        duration: 2,
+        ease: Expo.easeInOut,
+        delay: -1.5
+    })
+}
+
+firstPageAnim();
