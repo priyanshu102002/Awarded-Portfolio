@@ -61,7 +61,7 @@ function ovalCircleMouseFollower() {
     let yPrev = 0;
 
     main.addEventListener("mousemove",(e) => {
-        clearTimeout(timeout);
+        
         let xDiff = e.clientX - xPrev;
         let yDiff = e.clientY - yPrev;
 
@@ -77,6 +77,7 @@ function ovalCircleMouseFollower() {
         timeout = setTimeout(function(){
             pointer.style.transform = `translate(${e.clientX}px,${e.clientY}px) scale(1,1)`;
         },100)
+        clearTimeout(timeout);
     })
 }
 
@@ -111,3 +112,34 @@ function firstPageAnim(){
 }
 
 firstPageAnim();
+
+
+
+document.querySelectorAll(".elem").forEach(function(elem){
+
+    let diff = 0;
+    let rotate = 0;
+
+    elem.addEventListener("mousemove",function(event){
+        
+        let difference = event.clientY - elem.getBoundingClientRect().top;
+
+        diff = event.clientX - rotate;
+        rotate = event.clientX;
+
+        gsap.to(elem.querySelector("img"),{
+            opacity: 1,
+            ease: Power3,
+            top: difference,
+            left: event.clientX,
+            rotate: gsap.utils.clamp(-20,20,diff*.5)
+        })
+    })
+    elem.addEventListener("mouseleave",function(event){
+        gsap.to(elem.querySelector("img"),{
+            opacity: 0,
+            duration: .5,
+            ease: Power3,
+        })
+    })
+})
