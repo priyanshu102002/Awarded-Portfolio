@@ -1,5 +1,6 @@
 const main = document.querySelector("#main");
 const pointer = document.querySelector(".pointer");
+let timeout = 0;
 
 // for scroll trigger and locomotive js work together
 function scrolltriggerandgsap() {
@@ -39,17 +40,27 @@ function scrolltriggerandgsap() {
 
 scrolltriggerandgsap();
 
-
-let timeout = 0;
-
-// for circle mouse follower
-function circleMouseFollower(xScale, yScale) {
-    main.addEventListener("mousemove", (e) => {
-        pointer.style.transform = `translate(${e.clientX}px,${e.clientY}px) scale(${xScale},${yScale})`;
+main.addEventListener("mousemove", function (event) {
+    gsap.to(pointer, {
+        x: event.clientX,
+        y: event.clientY,
+        stagger: 10,
     });
-}
+});
 
-circleMouseFollower();
+main.addEventListener("mouseenter", function (event) {
+    gsap.to(pointer, {
+        scale: 1,
+        opacity: 1,
+    });
+});
+
+main.addEventListener("mouseleave", function (event) {
+    gsap.to(pointer, {
+        scale: 0,
+        opacity: 0,
+    });
+});
 
 // for oval mouse follower
 
@@ -60,8 +71,7 @@ function ovalCircleMouseFollower() {
     let xPrev = 0;
     let yPrev = 0;
 
-    main.addEventListener("mousemove",(e) => {
-        
+    main.addEventListener("mousemove", (e) => {
         let xDiff = e.clientX - xPrev;
         let yDiff = e.clientY - yPrev;
 
@@ -69,77 +79,75 @@ function ovalCircleMouseFollower() {
         yPrev = e.clientY;
 
         // mapping
-        xScale = gsap.utils.clamp(.8,1.2,xDiff)
-        yScale = gsap.utils.clamp(.8,1.2,yDiff)
-        
-        circleMouseFollower(xScale,yScale);
+        xScale = gsap.utils.clamp(0.8, 1.2, xDiff);
+        yScale = gsap.utils.clamp(0.8, 1.2, yDiff);
 
-        timeout = setTimeout(function(){
+        circleMouseFollower(xScale, yScale);
+
+        timeout = setTimeout(function () {
             pointer.style.transform = `translate(${e.clientX}px,${e.clientY}px) scale(1,1)`;
-        },100)
+        }, 100);
         clearTimeout(timeout);
-    })
+    });
 }
 
 ovalCircleMouseFollower();
 
 //  for first page animation
-function firstPageAnim(){
+function firstPageAnim() {
     const tl = gsap.timeline();
 
-    tl.from("nav",{
+    tl.from("nav", {
         y: -10,
         opacity: 0,
         duration: 2,
-        ease: Expo.easeInOut
-    })
+        ease: Expo.easeInOut,
+    });
 
-    tl.to(".boundingelem",{
+    tl.to(".boundingelem", {
         y: 0,
         duration: 2,
         ease: Expo.easeInOut,
         stagger: 0.2,
-        delay: -1
-    })
+        delay: -1,
+    });
 
-    tl.from(".hero-footer",{
+    tl.from(".hero-footer", {
         y: -20,
         opacity: 0,
         duration: 2,
         ease: Expo.easeInOut,
-        delay: -1.5
-    })
+        delay: -1.5,
+    });
 }
 
 firstPageAnim();
 
+// for second page animation
 
-
-document.querySelectorAll(".elem").forEach(function(elem){
-
+document.querySelectorAll(".elem").forEach(function (elem) {
     let diff = 0;
     let rotate = 0;
 
-    elem.addEventListener("mousemove",function(event){
-        
+    elem.addEventListener("mousemove", function (event) {
         let difference = event.clientY - elem.getBoundingClientRect().top;
 
         diff = event.clientX - rotate;
         rotate = event.clientX;
 
-        gsap.to(elem.querySelector("img"),{
+        gsap.to(elem.querySelector("img"), {
             opacity: 1,
             ease: Power3,
             top: difference,
             left: event.clientX,
-            rotate: gsap.utils.clamp(-20,20,diff*.5)
-        })
-    })
-    elem.addEventListener("mouseleave",function(event){
-        gsap.to(elem.querySelector("img"),{
+            rotate: gsap.utils.clamp(-20, 20, diff * 0.5),
+        });
+    });
+    elem.addEventListener("mouseleave", function (event) {
+        gsap.to(elem.querySelector("img"), {
             opacity: 0,
-            duration: .5,
+            duration: 0.5,
             ease: Power3,
-        })
-    })
-})
+        });
+    });
+});

@@ -28,13 +28,12 @@ body {
 }
 
 .pointer{
-    transition: cubic-bezier(0.19, 1, 0.22, 1) all 1s;
     position: absolute;
     z-index: 999;
-    width: 15px;
-    height: 15px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background-color: #a3a3a3;
+    background-color: white;
 }
 
 .hero {
